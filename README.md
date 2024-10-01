@@ -19,6 +19,28 @@ TradeScout computes multiple metrics for each trade, including:
 - **WTD PL (Week-to-Date Profit/Loss)**: The total premium captured from the most recent Monday to the current day.
 - **MTD PL (Month-to-Date Profit/Loss)**: The total premium captured from the first day of the current month to the current day.
 
+## Installation
+
+To install the dependencies required for TradeScout, use the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+The `requirements.txt` file includes the following dependencies:
+
+```text
+pandas==1.5.3
+requests==2.28.1
+pygetwindow==0.0.9
+pyautogui==0.9.53
+threading==0.1.0
+sqlite3==0.0.1
+PyYAML==6.0
+```
+
+Ensure that you have Python installed on your system and `pip` available for installing packages.
+
 ### Webhook Setup for Discord
 
 You can configure one or more webhooks for sending notifications to a specific Discord channel or thread.

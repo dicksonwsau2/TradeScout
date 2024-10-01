@@ -1,0 +1,19 @@
+# config.yaml
+
+# This file contains the configuration settings for the TradeScout project.
+# The "db_path" specifies the path to the SQLite database.
+# The "webhooks" section stores Discord webhook URLs and optional thread IDs 
+# for sending trade reports. You can add or modify webhooks and database path as needed.
+
+# Path to your database file
+# Note: use black slash "/" in path
+db_path: "data/data.db3"  
+
+webhooks:
+  # The "url" field is required and should be the full Discord webhook URL.
+  # The "thread_id" field is optional. If provided, the message will be sent to a specific thread in Discord.
+  # If no "thread_id" is provided, the message will be sent to the main channel linked to the webhook.
+  - url: "https://discord.com/api/webhooks/WEBHOOK_ID"
+    thread_id: "THREAD_ID"  # Optional: If provided, sends the message to a specific thread. If not, the message goes to the main channel.
+  - url: "https://discord.com/api/webhooks/ANOTHER_WEBHOOK"
+    # No thread_id provided; the message will go to the main webhook channel.

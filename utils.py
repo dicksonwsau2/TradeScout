@@ -8,6 +8,8 @@ import pyautogui
 from datetime import datetime, timedelta
 import threading 
 import calendar
+from io import BytesIO
+import tempfile
 
 def load_yaml_config():
     """
@@ -27,7 +29,7 @@ def load_yaml_config():
 
     with open(config_path, 'r') as f:
         return yaml.safe_load(f)
-    
+
 def take_screenshot_of_app(app_name, win):
     try:
         app_window = gw.getWindowsWithTitle(app_name)[0]
@@ -44,9 +46,15 @@ def take_screenshot_of_app(app_name, win):
     app_window.activate()
     pyautogui.sleep(2)
 
-    # Take the screenshot of the app window but do not save it to a file
+    # Take the screenshot
     screenshot = pyautogui.screenshot(region=(app_window.left, app_window.top, app_window.width, app_window.height))
-    return screenshot  # Return the screenshot object instead of saving it
+
+    # Save the screenshot to a temporary file
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
+    screenshot.save(temp_file.name)
+    temp_file.close()
+
+    return temp_file.name  # Return the path of the temporary screenshot file
 
 def convert_to_human_readable(bigint_timestamp):
     unix_time = (bigint_timestamp - 116444736000000000) / 10000000

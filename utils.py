@@ -43,9 +43,10 @@ def take_screenshot_of_app(app_name, win):
 
     app_window.activate()
     pyautogui.sleep(2)
-    screenshot = pyautogui.screenshot(region=(app_window.left, app_window.top, app_window.width, app_window.height))
 
-    return screenshot_path
+    # Take the screenshot of the app window but do not save it to a file
+    screenshot = pyautogui.screenshot(region=(app_window.left, app_window.top, app_window.width, app_window.height))
+    return screenshot  # Return the screenshot object instead of saving it
 
 def convert_to_human_readable(bigint_timestamp):
     unix_time = (bigint_timestamp - 116444736000000000) / 10000000

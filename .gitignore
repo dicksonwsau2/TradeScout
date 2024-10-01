@@ -14,5 +14,5 @@ data/data.db3
 dist/*.png
 *.jpg
 
-# Ignore YAML configuration files in the config directory
+# Ignore the real config.yaml file with sensitive information
 config/config.yaml

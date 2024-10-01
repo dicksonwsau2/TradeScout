@@ -12,7 +12,11 @@ data/data.db3
 
 # Ignore any screenshots
 dist/*.png
-*.jpg
+*.png
 
 # Ignore the real config.yaml file with sensitive information
 config/config.yaml
+
+# Ignore Python cache files
+__pycache__/
+*.pyc

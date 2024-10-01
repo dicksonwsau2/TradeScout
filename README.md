@@ -1,84 +1,73 @@
+
 # TradeScout
 
-TradeScout is a tool for processing trades, calculating profit/loss summaries, and sending updates to Discord channels. The project uses SQLite as the backend database and Discord webhooks for notifications.
+**TradeScout** is a tool that integrates with trades from [Trade Automation Toolbox (TAT)](https://tradeautomationtoolbox.com/). It provides detailed analytics and metrics to track trade performance based on various parameters and outputs summaries to a configured Discord channel using webhooks.
 
 ## Features
-- Fetches trade data from an SQLite database.
-- Calculates various trade metrics, including profit/loss, win rate, and PCR (Premium Captured Ratio).
-- Sends formatted reports to Discord channels or threads.
-- Supports capturing screenshots of a trading application and uploading them to Discord.
-- Configurable through a `config.yaml` file.
 
-## Installation
+TradeScout computes multiple metrics for each trade, including:
 
-1. Clone the repository:
-   `git clone <repository-url> && cd TradeScout`
+- **SPX Last**: The last recorded value of the SPX index for the day.
+- **Premium Sold**: Total premium sold from all trades.
+- **Premium Captured**: Total premium captured from all trades (profits/losses).
+- **PCR (Premium Capture Rate)**: Percentage of premium captured relative to the total premium sold.
+- **Win %**: The percentage of profitable trades.
+- **Expired Trades**: Number of trades that expired without being processed.
+- **Stopped Trades**: Number of trades that were closed due to hitting their stop target.
+- **Bad Slip**: The number of trades where the slippage (difference between the close price and stop target) is greater than or equal to 0.50. The maximum slippage amount is also displayed.
+- **Negative Expired**: Number of trades where the expiration was processed, but the trade had a negative outcome.
+- **WTD PL (Week-to-Date Profit/Loss)**: The total premium captured from the most recent Monday to the current day.
+- **MTD PL (Month-to-Date Profit/Loss)**: The total premium captured from the first day of the current month to the current day.
 
-2. Create a virtual environment:
-   `python -m venv venv`
+### Webhook Setup for Discord
 
-3. Activate the virtual environment:
+You can configure one or more webhooks for sending notifications to a specific Discord channel or thread.
 
-   - On Windows:
-     `venv\Scripts\activate`
-   - On macOS/Linux:
-     `source venv/bin/activate`
+Here’s an example of how the webhook is structured in the `config.yaml` file:
 
-4. Install the dependencies:
-   `pip install -r requirements.txt`
-
-## Configuration
-
-Modify the `config/config.yaml` file to specify the database path and Discord webhooks.
-
-### Example `config.yaml`:
-
-## Path to the SQLite database file
-db_path: "data/data.db3"
-
-## Webhook settings for Discord
+```yaml
 webhooks:
   - url: "https://discord.com/api/webhooks/WEBHOOK_ID"
-    thread_id: "THREAD_ID"  # Optional: If provided, sends the message to a specific thread. If not, the message goes to the main channel.
+    thread_id: "THREAD_ID"  # Optional: Sends the message to a specific thread if provided. If omitted, the message will go to the main channel.
   - url: "https://discord.com/api/webhooks/ANOTHER_WEBHOOK"
-    # No thread_id provided; the message will go to the main webhook channel.
+    thread_id: null  # No thread ID provided; the message will be sent to the main webhook channel.
+```
 
-## Notes:
-  - db_path: This specifies the location of the SQLite database file.
-  - webhooks: You can configure one or more webhooks for sending notifications. Each webhook can optionally include a thread_id to send messages to a specific Discord thread.
+#### Notes:
+- **db_path**: This specifies the location of the SQLite database file.
+- **webhooks**: You can configure multiple webhooks for different notifications. Each webhook can optionally include a `thread_id` to target a specific thread in a Discord channel.
 
-## Usage:
-You can run the tool with the following command-line options: python trade_scout.py --date 20240920 --win restore
+### Running TradeScout
 
-## Available Command-Line Options:
-    --date YYYYMMDD: Specify the date for processing trades. If omitted, the current date will be used.
-    --win max|restore: Adjust the window size before taking a screenshot. Use max to maximize the window, or restore to restore it if minimized.
-    --noimage: Disable screenshot capturing and image upload to Discord.
-    --debug: Print the message to the console and save the screenshot to a local file, without sending it to Discord.
+To run the TradeScout tool, use the following command:
 
-## Features:
-    Screenshot Capture: Takes a screenshot of the trading application window and uploads it to Discord.
-    Report Sending: Sends a detailed report to Discord, including trade metrics such as:
-      - Premium Sold
-      - Premium Captured
-      - PCR (Premium Captured Ratio)
-      - Win Rate
-      - Expired Trades and Stops
-      - Weekly and Monthly Profit/Loss Summaries
+```bash
+python trade_scout.py --date YYYYMMDD --win restore
+```
 
-## Example Output:
+Where:
+- `--date YYYYMMDD`: Specifies the date for which trades should be processed (e.g., `20240920`). If omitted, the current date will be used.
+- `--win`: Adjusts the window size for the application before capturing a screenshot. `restore` restores the window to its original size, while `max` maximizes it.
 
-2024 Sep 20 (Friday)
--------------|--------------
-Prem Sold    |    $14,500.00
-Prem Cap     |  ($10,091.01)
-PCR          |       -69.59%
-Win %        |        30.00%
-Exp : Stp    |           3:7
-Bad Slip     |             2
--ve Exprd    |             0
-Wkly PL      |   ($1,711.87)
-Mth PL       |    $17,425.42
+### Example Output
 
-## License:
-    This project is licensed under the MIT License. See the LICENSE file for details.
+Here’s an example of the output sent to Discord:
+
+```
+2024 Sep 30 (Monday)
+----------
+SPX Last  |  5,762.48
+Prem Sold | $14,660.00
+Prem Cap  | ($25,742.27)
+PCR       | -175.60%
+Win %     | 10.00%
+Exp : Stp | 1:9
+Bad Slip  | 7(4.50 max)
+-ve Exprd | 0
+WTD PL    | ($25,742.27)
+MTD PL    | ($13,664.35)
+```
+
+![Example Output](image.png)
+
+In this output, the SPX index, premium sold, premium captured, and other metrics are displayed, followed by a screenshot of the associated trading data.

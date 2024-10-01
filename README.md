@@ -26,6 +26,10 @@ You can configure one or more webhooks for sending notifications to a specific D
 Here’s an example of how the webhook is structured in the `config.yaml` file:
 
 ```yaml
+# Path to your database file
+# Note: use black slash "/" in path
+db_path: "data/data.db3"  
+
 webhooks:
   - url: "https://discord.com/api/webhooks/WEBHOOK_ID"
     thread_id: "THREAD_ID"  # Optional: Sends the message to a specific thread if provided. If omitted, the message will go to the main channel.
@@ -34,7 +38,7 @@ webhooks:
 ```
 
 #### Notes:
-- **db_path**: This specifies the location of the SQLite database file.
+- **db_path**: This specifies the location of the SQLite database file of TAT (look for a folder called LocalState).
 - **webhooks**: You can configure multiple webhooks for different notifications. Each webhook can optionally include a `thread_id` to target a specific thread in a Discord channel.
 
 ### Running TradeScout
@@ -55,7 +59,7 @@ Here’s an example of the output sent to Discord:
 
 ```
 2024 Sep 30 (Monday)
-----------
+---------------------
 SPX Last  |  5,762.48
 Prem Sold | $14,660.00
 Prem Cap  | ($25,742.27)
@@ -68,6 +72,6 @@ WTD PL    | ($25,742.27)
 MTD PL    | ($13,664.35)
 ```
 
-![Example Output](image.png)
+![Example Output](TradeScoutOutputExample.jpg)
 
 In this output, the SPX index, premium sold, premium captured, and other metrics are displayed, followed by a screenshot of the associated trading data.

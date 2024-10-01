@@ -12,10 +12,10 @@ TradeScout computes multiple metrics for each trade, including:
 - **Premium Captured**: Total premium captured from all trades (profits/losses).
 - **PCR (Premium Capture Rate)**: Percentage of premium captured relative to the total premium sold.
 - **Win %**: The percentage of profitable trades.
-- **Expired Trades**: Number of trades that expired without being processed.
+- **Expired Trades**: Number of trades that expired worthless.
 - **Stopped Trades**: Number of trades that were closed due to hitting their stop target.
-- **Bad Slip**: The number of trades where the slippage (difference between the close price and stop target) is greater than or equal to 0.50. The maximum slippage amount is also displayed.
-- **Negative Expired**: Number of trades where the expiration was processed, but the trade had a negative outcome.
+- **Bad Slip**: The number of trades where the slippage (difference between the close price and stop target) is greater than or equal to $0.50. The maximum slippage amount is also displayed.
+- **Negative Expired**: Number of trades where that expired but the trade had a negative profit.
 - **WTD PL (Week-to-Date Profit/Loss)**: The total premium captured from the most recent Monday to the current day.
 - **MTD PL (Month-to-Date Profit/Loss)**: The total premium captured from the first day of the current month to the current day.
 

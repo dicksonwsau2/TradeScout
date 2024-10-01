@@ -1,3 +1,6 @@
+import os
+import sys
+import yaml
 import pandas as pd  
 import sqlite3 
 import pygetwindow as gw
@@ -6,6 +9,25 @@ from datetime import datetime, timedelta
 import threading 
 import calendar
 
+def load_yaml_config():
+    """
+    Load the YAML configuration file from the correct path based on whether
+    the program is running as a script or as an executable.
+    """
+    if hasattr(sys, '_MEIPASS'):
+        # If running as an executable, load from the same directory as the executable
+        config_path = os.path.join(os.path.dirname(sys.executable), 'config.yaml')
+    else:
+        # If running as a script, load from the 'config' folder at the same level as the script
+        script_dir = os.path.dirname(__file__)
+        config_path = os.path.join(script_dir, 'config', 'config.yaml')
+
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"Configuration file not found at {config_path}")
+
+    with open(config_path, 'r') as f:
+        return yaml.safe_load(f)
+    
 def take_screenshot_of_app(app_name, win):
     try:
         app_window = gw.getWindowsWithTitle(app_name)[0]

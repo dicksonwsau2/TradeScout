@@ -1,0 +1,18 @@
+# Ignore the build folder
+build/
+
+# Ignore the dist folder and all its contents
+dist/
+
+# Ignore the database file
+data/data.db3
+
+# Ignore PyInstaller spec files
+*.spec
+
+# Ignore any screenshots
+dist/*.png
+*.jpg
+
+# Ignore YAML configuration files in the config directory
+config/config.yaml

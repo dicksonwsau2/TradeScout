@@ -1,13 +1,13 @@
 import requests
 import os
 import yaml
-from utils import take_screenshot_of_app
+from utils import take_screenshot_of_app, load_yaml_config
 
 # Load webhooks from config.yaml
 def load_webhooks():
-    with open('config/config.yaml', 'r') as f:  # Load from YAML file
-        config = yaml.safe_load(f)
+    config = load_yaml_config()
     return config['webhooks']
+
 # Send message to Discord
 def send_message_to_discord(message, noimage, win, debug):
     screenshot_path = None

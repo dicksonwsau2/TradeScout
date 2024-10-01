@@ -4,28 +4,19 @@ import yaml
 import os
 import time
 from datetime import datetime
-from utils import convert_to_human_readable 
+from utils import convert_to_human_readable, load_yaml_config
+import sys
 
 # Load YAML configuration
 def load_config():
-    # Resolve the config path relative to the current file (which is inside TradeScout)
-    config_path = os.path.join(os.path.dirname(__file__), 'config', 'config.yaml')
-    
-    if not os.path.exists(config_path):
-        raise FileNotFoundError(f"Configuration file not found at {config_path}")
-
-    with open(config_path, 'r') as f:
-        config = yaml.safe_load(f)
-    return config
+    return load_yaml_config()
 
 # Connect to the database using the db_path from config.yaml
-# Connect to the database with retry logic
 def connect_db(retries=5, delay=1):
     config = load_config()
     
-    # Resolve the db_path relative to the TradeScout project directory
-    tradescout_root = os.path.dirname(__file__)  # Use this as the root directory
-    db_path = os.path.join(tradescout_root, config.get('db_path', 'data/data.db3'))  # Default path if not found in config
+    # Use the database path from config.yaml
+    db_path = config.get('db_path', 'data/data.db3')
 
     # Check if the database file exists
     if not os.path.exists(db_path):

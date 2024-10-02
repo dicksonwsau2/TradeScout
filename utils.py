@@ -77,7 +77,7 @@ def get_specified_date(date_str=None):
 
 def format_message(date, premium_sold, premium_captured, pcr, win_rate, expired_trades, stops, bad_slip, bad_slip_max, spx_last, negative_exp, weekly_pl, monthly_pl):
     # Define a constant for alignment width
-    ALIGN_WIDTH = 11
+    ALIGN_WIDTH = 12
 
     # Format values as strings with proper formatting
     premium_sold_str = f"${premium_sold:,.2f}"

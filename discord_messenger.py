@@ -12,7 +12,7 @@ def send_message_to_discord(message, noimage, win, debug):
     screenshot_path = None
     if not noimage:
         # Take a screenshot and return the temporary file path
-        screenshot_path = take_screenshot_of_app("Trade Automation Tool", win)
+        screenshot_path = take_screenshot_of_app("Trade Automation Toolbox", win)
     
     message_ids = []
     webhooks = load_webhooks()  # Load webhooks from config.yaml

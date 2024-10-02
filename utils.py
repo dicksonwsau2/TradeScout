@@ -32,30 +32,46 @@ def load_yaml_config():
 
 def take_screenshot_of_app(app_name, win):
     try:
-        app_window = gw.getWindowsWithTitle(app_name)[0]
+        # Filter windows to match exactly the specified app name
+        app_windows = [w for w in gw.getWindowsWithTitle(app_name) if w.title == app_name]
+        
+        if not app_windows:
+            print(f"Application window '{app_name}' not found.")
+            return None
+
+        app_window = app_windows[0]  # Use the first window that exactly matches the app name
+        
+        # Handle window adjustment
+        if win == 'max' and not app_window.isMaximized:
+            app_window.maximize()
+        elif win == 'restore' and app_window.isMinimized:
+            app_window.restore()
+
+        app_window.activate()
+        pyautogui.sleep(2)  # Give it time to activate
+
+        # Ensure the window is still visible before taking a screenshot
+        if not app_window.isActive:
+            print(f"Application window '{app_name}' is not active.")
+            return None
+
+        # Take the screenshot
+        screenshot = pyautogui.screenshot(region=(app_window.left, app_window.top, app_window.width, app_window.height))
+
+        # Save the screenshot to a temporary file
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
+        screenshot.save(temp_file.name)
+        temp_file.close()
+
+        return temp_file.name  # Return the path of the temporary screenshot file
+
     except IndexError:
         print(f"Application window '{app_name}' not found.")
         return None
-
-    # Handle window adjustment
-    if win == 'max' and not app_window.isMaximized:
-        app_window.maximize()
-    elif win == 'restore' and app_window.isMinimized:
-        app_window.restore()
-
-    app_window.activate()
-    pyautogui.sleep(2)
-
-    # Take the screenshot
-    screenshot = pyautogui.screenshot(region=(app_window.left, app_window.top, app_window.width, app_window.height))
-
-    # Save the screenshot to a temporary file
-    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.png')
-    screenshot.save(temp_file.name)
-    temp_file.close()
-
-    return temp_file.name  # Return the path of the temporary screenshot file
-
+    except Exception as e:
+        print(f"An error occurred while capturing the screenshot: {e}")
+        return None
+    
 def convert_to_human_readable(bigint_timestamp):
     unix_time = (bigint_timestamp - 116444736000000000) / 10000000
     return (datetime(1970, 1, 1) + timedelta(seconds=unix_time)).replace(year=2024)

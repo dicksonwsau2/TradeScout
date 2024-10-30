@@ -51,9 +51,9 @@ def send_message_to_discord(message, noimage, win, debug):
             print(f"Error while sending message to {url}: {e}")
             message_ids.append(None)
 
-        # Clean up the temporary screenshot file after sending
-        if screenshot_path and os.path.exists(screenshot_path):
-            os.remove(screenshot_path)
+    # Clean up the temporary screenshot file after all webhooks have been processed
+    if screenshot_path and os.path.exists(screenshot_path):
+        os.remove(screenshot_path)
 
     return message_ids
 

@@ -1,33 +1,35 @@
 import sys
 import os
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime
 
-# Add the parent directory (where utils.py exists) to sys.path
+# Add parent directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from utils import get_most_recent_monday  # Import the function from utils.py
+from utils import get_most_recent_monday
 
 class TestGetMostRecentMonday(unittest.TestCase):
-    def test_get_most_recent_monday(self):
-        # Generate all dates from 2024-09-01 to 2024-09-30
-        start_date = datetime(2024, 9, 1)
-        end_date = datetime(2024, 9, 30)
-        delta = timedelta(days=1)
+    def test_get_most_recent_monday_known_cases(self):
+        """
+        Check a handful of known dates against their known "most recent Monday."
+        """
+        test_cases = [
+            # (InputDate, ExpectedMonday)
+            (datetime(2024, 9, 2), datetime(2024, 9, 2)),  # Monday -> same day
+            (datetime(2024, 9, 3), datetime(2024, 9, 2)),  # Tuesday -> previous Monday is 9/2
+            (datetime(2024, 9, 8), datetime(2024, 9, 2)),  # Sunday -> previous Monday is 9/2
+            (datetime(2024, 9, 9), datetime(2024, 9, 9)),  # Monday -> same day
+            (datetime(2024, 9, 10), datetime(2024, 9, 9)), # Tuesday -> Monday is 9/9
+        ]
 
-        current_date = start_date
-        while current_date <= end_date:
-            # Get the expected most recent Monday
-            expected_monday = get_most_recent_monday(current_date)
-
-            # Check if get_most_recent_monday returns the correct result
-            with self.subTest(date=current_date.strftime("%Y-%m-%d")):
-                result = get_most_recent_monday(current_date)
-                self.assertEqual(result, expected_monday, 
-                                 f"Failed for {current_date.strftime('%Y-%m-%d')}: expected {expected_monday.strftime('%Y-%m-%d')}, got {result.strftime('%Y-%m-%d')}")
-            
-            # Move to the next day
-            current_date += delta
+        for input_date, expected_monday in test_cases:
+            with self.subTest(date=input_date):
+                result = get_most_recent_monday(input_date)
+                self.assertEqual(
+                    result,
+                    expected_monday,
+                    f"For {input_date.date()}, expected {expected_monday.date()}, got {result.date()}"
+                )
 
 if __name__ == "__main__":
     unittest.main()
